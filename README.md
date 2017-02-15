@@ -316,6 +316,8 @@ Với directory ta cần sử dụng thêm option `-R`, ví dụ :
 
 	# chown -R lunglinh:root folder
 
+Kết quả 
+
 	drwxrwsr-x 2 lunglinh root    4096 Feb 15 21:41 folder/
 
 <a name="reference"></a>
