@@ -80,7 +80,7 @@ Người dùng cũng có thể thay đổi password của chính họ
 	Retype new UNIX password:
 	passwd: password updated successfully
 
-Có một cách tạo user account dễ dàng hơn, đó là sử dụng lệnh `adduser` (phân biệt với `useradd`). `adduser` sẽ tự động thư mục home, group, shell mặc định.
+Có một cách tạo user account dễ dàng hơn, đó là sử dụng lệnh `adduser` (phân biệt với `useradd`). `adduser` sẽ tự động tạo thư mục home, group, shell mặc định.
 
 	# adduser <name>
 	
