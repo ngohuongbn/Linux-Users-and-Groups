@@ -1,6 +1,27 @@
 # Linux-Users-and-Groups
 Các vấn đề liên quan đến permission. Một số ví dụ minh họa cách đặt và thay đổi permission cho user và group
 
+## Nội dung 
+
+[1. Permissions là gì ?](#permission)
+
+[2. Làm việc với Users, Groups, và Directories](#user_group)
+
+[3. Sudo](#sudo)
+
+[4. Làm việc với Groups](#group)
+
+[5. Tạo và xóa directory](#directory)
+
+[6. Thay đổi permission của file và directory](#change_permission)
+
+[7. Lệnh chmod](#chmod)
+
+[8. Lệnh chown](#chown)
+
+[9. Tham khảo](#reference)
+
+<a name="permission"></a>
 ## 1. Permissions là gì ?
 
 Linux/UNIX là một hệ điều hành đa nhiệm (multitask) như các OS khác, sự khác biệt lớn nhất nằm ở khả năng đa người dùng (multiuser). Linux cho phép nhiều hơn một người có thể truy cập hệ thống trong một cùng thời gian. Để cho khả năng đa người dùng hoạt động hiệu quả, phải có cơ chế bảo vệ người dùng khỏi tác động ảnh hưởng lẫn nhau. Điều này làm nảy sinh khái niệm permission.
@@ -28,6 +49,7 @@ Ví dụ
 	
 10 kí tự đầu tiên cho biết các quyền truy cập. Dấu trừ (-) đầu tiên cho biết loại file, d là directory, s là file đặc biệt, - là regular file. 3 kí tự tiếp là quyền cho người dùng đó, 3 ký tự tiếp nữa là cho nhóm người dùng, và 3 ký tự cuối cho tất cả những người dùng khác.
 
+<a name="user_group"></a>
 ## 2. Làm việc với Users, Groups, và Directories 
 	
 ### 2.1. Tạo và xóa user account
@@ -78,7 +100,8 @@ Sau khi thực hiện lệnh này, chỉ user account đó bị xóa, còn các 
 
 	# userdel -r <name>
 	
-## 3. Hiểu về Sudo
+<a name="sudo"></a>
+## 3. Sudo
 
 Root là super user, nó có khả năng làm mọi thứ trên hệ thống. Sudo cho phép các user và group sử dụng các lệnh mà thông thường không thể sử dụng được. Nó cho phép user có quyền như một admin mà không phải đăng nhập bằng tài khoản root. 
 
@@ -117,7 +140,8 @@ Sau đó lưu file và đăng xuất khỏi root. Và đăng nhập với user v
 Ví dụ : 
 
 	$ sudo visudo
-	
+
+<a name="group"></a>
 ## 4. Làm việc với Groups
 
 Linux sử dụng Group để tổ chức các User. Kiểm soát các thành viên trong group trong file `/etc/group`, trong đó sẽ có danh sách các group và thành viên của group đó. 
@@ -146,7 +170,161 @@ Một user có thể truy cập vào một file thuộc nhóm khác nếu họ c
 User cũng có thể thay đổi group cho file bằng lệnh :
 
     $ chgrp <group_name> <file_name>
+
+<a name="directory"></a>
+## 5. Tạo và xóa thư mục
 	
-## 4. Tạo và xóa thư mục
+Để tạo thư mục mới, sử dụng lệnh : 
+
+	$ mkdir <directory name>
 	
+Vừa tạo thư mục mới, vừa thiết lập permission ta sử dụng thêm option `-m` như sau :
+
+	$ mkdir -m a=rwx <directory name>
 	
+`-m` là viết tắt của mode, `a=rwx` là tất cả (all) các user đều có quyền read, write và execute trên thư mục này.
+
+Để xóa file : 
+
+	$ rm <file>
+	
+Để xóa thư mục : 
+
+	$ rm -r <directory name>
+	
+Option `r` (recursive) là xóa toàn bộ thư mục, các thư mục con và nội dung của chúng. 
+
+<a name="change_permission"></a>
+## 6. Thay đổi permission của file và directory
+
+Để thấy được các permission và quyền sở hữu của file và directory, ta sử dụng lệnh 
+
+	$ ls -la
+
+Option `a` (all) là hiển thị tất cả các file (bao gồm cả file ẩn)
+
+Option `l` (long listing) là hiển thị mỗi file một dòng
+	
+	total 152
+	drwx------ 5 locvu locvu   4096 Feb 15 18:38 .
+	drwxr-xr-x 6 root  root    4096 Feb 15 14:10 ..
+	-rw------- 1 locvu locvu   1030 Feb 10 09:29 .bash_history
+	-rw-r--r-- 1 locvu locvu    220 Jan 17 15:42 .bash_logout
+	-rw-r--r-- 1 locvu locvu   3637 Jan 17 15:42 .bashrc
+	drwx------ 2 locvu locvu   4096 Jan 23 16:32 .cache
+	-rw-rw-r-- 1 locvu locvu    195 Feb  7 10:36 check_dis.sh
+	
+Cột đầu là 10 ký tự về permission
+
+Cột 2 là số file hoặc directory trong directory đó
+
+Các cột tiếp đó là owner, group, size, date và time của lần truy cập gần nhất, tên file/dir
+
+*Lưu ý :* Một directory có thể coi là một file, size của nó là 4096, nó không phải kích thước nội dung chứa trong directory đó.
+
+<a name="chmod"></a>
+## 7. Lệnh chmod 
+
+### 7.1 Vài nét về `chmod`
+
+Lệnh `chmod` viết tắt của change mode. Nó dùng để thay đổi permission của file/dir. Chúng ta có thể sử dụng chữ hoặc số (octal) để thiết lập permission. Với chữ, ta áp dụng theo bảng sau: 
+
+| Kí tự | Permission | 
+|-------|------------|
+| r | Read |
+| w | Write |
+| x | Execute |
+| X | Là x nhưng chỉ áp dụng với directory | 
+| u | Người sở hữu (owner) |
+| g | Nhóm sở hữu (group) |
+| o | Các user khác (other)| 
+| a | All, tương đương với u+g+o |
+
+Ví dụ thêm (`+`) quyền execute cho owner, và bỏ (`-`) quyền read của group 
+
+	$ chmod u+x,g-r <file-name>
+ 
+### 7.2 Phân quyền theo dạng Octal 
+
+Quy ước : 
+
+	r = 4
+	w = 2
+	x = 1
+	- = 0
+	
+Tính tổng 3 số của mỗi phần phân cho các đối tượng người dùng ta được một số đại diện cho phần đó
+
+Ví dụ :
+
+    rwx = 7
+	rw- = 6
+	r-x = 5
+    r-- = 4
+    ...
+
+Ví dụ lệnh cấp quyền rwx cho owner, r-x cho group và other :
+
+	$ chmod 755 <file-name>
+
+	
+### 7.3 Sticky bit và setuid bit
+
+Bên cạnh +r, +w, +x còn có một số mode khác có thể hữu ích. Đặc biệt là +t (sticky setuid) và +s (setuid bit)
+	
+Khi file/dir được đặt +t thì chỉ có owner và root mới có thể delete file. Kể cả những người có quyền write vào file/dir. 
+
+Để thêm sticky bit ta theo lệnh sau : 
+
+	$ chmod +t <file-name>
+	
+Kết quả 
+
+	-rw-rw-r-T 1 locvu locvu    0 Feb 15 14:22 file-example
+
+Để xóa sticky bit, ta dùng `chmod -t`. 
+
+
+Khi file/dir được đặt +s cho phép một file thực thi có thể chạy bởi người không phải chủ sở hữu mà có thể chạy như chính chủ sở hữu. 
+
+Ví dụ file `work` được sở hữu bởi `root` và group `marketing`. Các thành viên trong nhóm `marketing` có thể chạy file `work` như họ đang là `root`. 
+
+Để đặt `+s` trên file `/usr/bin/work` ta dùng lệnh : 
+
+	# chmod g+s /usr/bin/work
+	
+`+s` đối với directory thì có phần khác. Những file được tạo trong directory có `+s` đó sẽ nhận quyền của user và group của directory đó, chứ không phải người tạo ra file đó và nhóm mặc định của họ. 
+
+Để setgid (group id) trên một directory, ta sử dụng theo lệnh : 
+
+	# chmod g+s /var/doc-store/
+
+Để setuid (user id) trên một directory, ta sử dụng theo lệnh : 
+
+	# chmod u+s /var/doc-store/
+
+<a name="chown"></a>	
+## 8. Lệnh chown
+
+Lệnh chown (change owner) để thay đổi quyền sở hữu của file. Mặc định quyền sở hữu của file thuộc về user tạo ra file đó và group mặc định của user đó. 
+
+Để thay đổi quyền sở hữu của file, ta sử dụng theo lệnh :
+
+    # chown user_name:group_name <file-name> 
+	
+Với directory ta cần sử dụng thêm option `-R`, ví dụ : 
+
+	# chown -R lunglinh:root folder
+
+	drwxrwsr-x 2 lunglinh root    4096 Feb 15 21:41 folder/
+
+<a name="reference"></a>
+## 9. Tham khảo 
+
+[Linux Users and Groups](https://www.linode.com/docs/tools-reference/linux-users-and-groups)
+
+[User Account and Group Management](http://www.cae.wisc.edu/cae-account-management/)
+
+[Users and Groups Administration in Linux](http://www.debianadmin.com/users-and-groups-administration-in-linux.html)
+
+[Online Chmod Calculator](http://www.onlineconversion.com/html_chmod_calculator.htm)
