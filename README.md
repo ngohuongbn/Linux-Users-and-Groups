@@ -380,6 +380,15 @@ User root có umask 0022
 
 Do đó khi permisstion mặc định cho file là 0644 và dir là 0755
 
+Để thay đổi umask, thêm vào cuối file `~/.bashrc` để áp dụng cho riêng user, còn `/etc/profile` hoặc `/etc/bash.bashrc` để áp dụng cho tất cả các user.
+
+Ví dụ: 
+
+	umask 0111
+	
+NOTE: đường dẫn trên có thể khác nhau tùy distro, ở đây mình dùng với Ubuntu 16.04
+
+Thay đổi trên `~/.bashrc` được ưu tiên hơn.
 
 <a name="reference"></a>
 ## 11. Tham khảo 
