@@ -19,7 +19,11 @@ Các vấn đề liên quan đến permission. Một số ví dụ minh họa c�
 
 [8. Lệnh chown](#chown)
 
-[9. Tham khảo](#reference)
+[9. Lệnh chgrp](#chgrp)
+
+[10. Default Permissions](#umask)
+
+[11. Tham khảo](#reference)
 
 <a name="permission"></a>
 ## 1. Permissions là gì ?
@@ -268,11 +272,13 @@ Ví dụ lệnh cấp quyền rwx cho owner, r-x cho group và other :
 	$ chmod 755 <file-name>
 
 	
-### 7.3 Sticky bit và setuid bit
+### 7.3 Sticky bit và SUID/SGID
 
-Bên cạnh +r, +w, +x còn có một số mode khác có thể hữu ích. Đặc biệt là +t (sticky setuid) và +s (setuid bit)
+##### Sticky bit (octal 1000)
+
+Bên cạnh +r, +w, +x còn có một số mode khác có thể hữu ích. Đặc biệt là +t (sticky bit), u+s (suid) và g+s (guid) 
 	
-Khi file/dir được đặt +t thì chỉ có owner và root mới có thể delete file. Kể cả những người có quyền write vào file/dir. 
+Khi file/dir được đặt +t thì chỉ có owner và root mới có thể delete file. Kể cả những người có quyền write vào file/dir cũng không thể xóa chúng. 
 
 Để thêm sticky bit ta theo lệnh sau : 
 
@@ -282,17 +288,41 @@ Kết quả
 
 	-rw-rw-r-T 1 locvu locvu    0 Feb 15 14:22 file-example
 
+
+Với dir :
+	
+	$ chmod +t playground
+
+Kết quả 
+	
+	drwxrwxrwt  2 locvu locvu    4096 Dec  9 20:58 playground
+
+Cũng có thể thêm sticky bit theo hệ cơ số 8 
+
+	$ chmod 1xxx <file-name>
+
 Để xóa sticky bit, ta dùng `chmod -t`. 
 
+##### SUID/SGID (octal 4000/2000)
 
-Khi file/dir được đặt +s cho phép một file thực thi có thể chạy bởi người không phải chủ sở hữu mà có thể chạy như chính chủ sở hữu. 
+Một file có như sau : 
 
-Ví dụ file `work` được sở hữu bởi `root` và group `marketing`. Các thành viên trong nhóm `marketing` có thể chạy file `work` như họ đang là `root`. 
+```
+-rwsrwsr-x  1 trang trang   17 Dec  9 21:37 s1.sh*
+```
+
+Chữ `s` đầu tiên biểu diễn cho setuid bit, chữ `s` sau biểu diễn setgid bit được bật
+
+suid (u+s) khi thiết lập trên file cho phép người dùng với quyền thực thi có khả năng chạy file đó với quyền của owner.
+
+sgid (g+s) tương tự suid nhưng là dành cho nhóm 
+
+Ví dụ file `work` được sở hữu bởi `root` và group `marketing`. Các thành viên trong nhóm `marketing` có thể chạy file `work` nếu họ là `root`. 
 
 Để đặt `+s` trên file `/usr/bin/work` ta dùng lệnh : 
 
 	# chmod g+s /usr/bin/work
-	
+
 `+s` đối với directory thì có phần khác. Những file được tạo trong directory có `+s` đó sẽ nhận quyền của user và group của directory đó, chứ không phải người tạo ra file đó và nhóm mặc định của họ. 
 
 Để setgid (group id) trên một directory, ta sử dụng theo lệnh : 
@@ -314,14 +344,45 @@ Lệnh chown (change owner) để thay đổi quyền sở hữu của file. M�
 	
 Với directory ta cần sử dụng thêm option `-R`, ví dụ : 
 
-	# chown -R lunglinh:root folder
+	# chown -R lunglinh:root directory
 
 Kết quả 
 
-	drwxrwsr-x 2 lunglinh root    4096 Feb 15 21:41 folder/
+	drwxrwsr-x 2 lunglinh root    4096 Feb 15 21:41 directory/
+
+<a name="chgrp"></a>
+## 9. Lệnh chgrp
+
+Lệnh chgrp (change group) để thay đổi quyền sở hữu của nhóm
+
+Cú pháp :
+
+	# chgrp  <group>  <filename/dirname>
+
+<a name="umask"></a>
+## 10. Default Permissions
+
+Permisstion của file/dir được xác định bởi 2 thành phần là "bare permisstion" và "mask"
+
+Bare permisstion là giá trị được thiết lập sẵn, không thể thay đổi : 666 với file và 777 với dir 
+
+Mask được thiết lập bởi người dùng bằng lệnh umask 
+
+Permisstion được tính bằng `Bare permisstion` AND `Mask`
+
+Theo mặc định : 
+
+User thường có umask 0002 
+
+Do đó khi permisstion mặc định cho file là 0664 và dir là 0775
+
+User root có umask 0022
+
+Do đó khi permisstion mặc định cho file là 0644 và dir là 0755
+
 
 <a name="reference"></a>
-## 9. Tham khảo 
+## 11. Tham khảo 
 
 [Linux Users and Groups](https://www.linode.com/docs/tools-reference/linux-users-and-groups)
 
