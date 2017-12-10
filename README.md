@@ -23,7 +23,9 @@ Các vấn đề liên quan đến permission. Một số ví dụ minh họa c�
 
 [10. Default Permissions](#umask)
 
-[11. Tham khảo](#reference)
+[11. ACLs](#acls)
+
+[12. Tham khảo](#reference)
 
 <a name="permission"></a>
 ## 1. Permissions là gì ?
