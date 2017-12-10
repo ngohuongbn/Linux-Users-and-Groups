@@ -364,23 +364,24 @@ Cú pháp :
 <a name="umask"></a>
 ## 10. Default Permissions
 
-Permisstion của file/dir được xác định bởi 2 thành phần là "bare permisstion" và "mask"
+Permission của file/dir được xác định bởi 2 thành phần là "bare permission" và "mask"
+Permission của file/dir được xác định bởi 2 thành phần là "bare permission" và "mask"
 
-Bare permisstion là giá trị được thiết lập sẵn, không thể thay đổi : 666 với file và 777 với dir 
+Bare permission là giá trị được thiết lập sẵn, không thể thay đổi : 666 với file và 777 với dir 
 
 Mask được thiết lập bởi người dùng bằng lệnh umask 
 
-Permisstion được tính bằng `Bare permisstion` AND `Mask`
+Permission được tính bằng `Bare permission` AND `Mask`
 
 Theo mặc định : 
 
-User thường có umask 0002 
+- User thường có umask 0002 
 
-Do đó khi permisstion mặc định cho file là 0664 và dir là 0775
+Do đó khi permission mặc định cho file là 0664 và dir là 0775
 
-User root có umask 0022
+- User root có umask 0022
 
-Do đó khi permisstion mặc định cho file là 0644 và dir là 0755
+Do đó khi permission mặc định cho file là 0644 và dir là 0755
 
 Để thay đổi umask, thêm vào cuối file `~/.bashrc` để áp dụng cho riêng user, còn `/etc/profile` hoặc `/etc/bash.bashrc` để áp dụng cho tất cả các user.
 
