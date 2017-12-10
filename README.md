@@ -280,7 +280,7 @@ Ví dụ lệnh cấp quyền rwx cho owner, r-x cho group và other :
 
 Bên cạnh +r, +w, +x còn có một số mode khác có thể hữu ích. Đặc biệt là +t (sticky bit), u+s (suid) và g+s (guid) 
 	
-Khi file/dir được đặt +t thì chỉ có owner và root mới có thể delete file. Kể cả những người có quyền write vào file/dir cũng không thể xóa chúng. 
+Khi file/dir được đặt +t thì chỉ có owner và root mới có thể delete file. Kể cả những người có quyền write vào file/dir cũng không thể xóa chúng. *//dòng này hình như sai*
 
 Để thêm sticky bit ta theo lệnh sau : 
 
