@@ -397,7 +397,7 @@ File và dir có những permission cho owner, group, other user, tuy nhiên nh�
 
 Do đó ACLs ra đời nhằm giải quyết bài toán trên. ACLs hỗ trợ các hệ thống file ReiserFS, Ext2, Ext3, JFS, XFS.
 
-
+Một ví dụ để hiểu hơn về ACLs. [ACLs Example](https://github.com/locvx1234/Linux-Users-and-Groups/blob/master/ACLs.md) 
 
 <a name="reference"></a>
 ## 12. Tham khảo 
