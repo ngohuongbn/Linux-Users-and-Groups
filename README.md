@@ -390,8 +390,17 @@ NOTE: đường dẫn trên có thể khác nhau tùy distro, ở đây mình d�
 
 Thay đổi trên `~/.bashrc` được ưu tiên hơn.
 
+<a name="acls"></a>
+## 11. ACLs
+
+File và dir có những permission cho owner, group, other user, tuy nhiên những permission này có giới hạn. Ví dụ, những user khác nhau không thể có những permission khác nhau trên cùng một file/dir.
+
+Do đó ACLs ra đời nhằm giải quyết bài toán trên. ACLs hỗ trợ các hệ thống file ReiserFS, Ext2, Ext3, JFS, XFS.
+
+
+
 <a name="reference"></a>
-## 11. Tham khảo 
+## 12. Tham khảo 
 
 [Linux Users and Groups](https://www.linode.com/docs/tools-reference/linux-users-and-groups)
 
