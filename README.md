@@ -299,9 +299,7 @@ Kết quả
 	
 	drwxrwxrwt  2 locvu locvu    4096 Dec  9 20:58 playground
 
-Cũng có thể thêm sticky bit theo hệ cơ số 8 
 
-	$ chmod 1xxx <file-name>
 
 Để xóa sticky bit, ta dùng `chmod -t`. 
 
@@ -334,6 +332,16 @@ Ví dụ file `work` được sở hữu bởi `root` và group `marketing`. Cá
 Để setuid (user id) trên một directory, ta sử dụng theo lệnh : 
 
 	# chmod u+s /var/doc-store/
+	
+Cũng có thể thêm sticky bit và SUID/SGID theo hệ cơ số 8, thêm 1 bit đầu có giá trị từ 1-7:
+
+	suid = 4
+	guid = 2
+	sticky = 1
+	
+Ví dụ: Thêm sticky bit
+
+	$ chmod 1xxx <file-name>
 
 <a name="chown"></a>	
 ## 8. Lệnh chown
